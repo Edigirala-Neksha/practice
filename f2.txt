@@ -21,7 +21,7 @@ add path to environment variables till minikub48
 creation of image:
 git clone ....
 docker build -t web-app-222 .
-docker run -d -p 7777:8080 hubimg-web-app-222
+docker run -d --name cont1 -p 7777:8080 web-app-222
 docker tag web-app-222 neksha/hubimg-web-app-222:latest
 docker push neksha/hubimg-web-app-222:latest
 
