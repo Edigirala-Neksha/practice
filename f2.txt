@@ -16,11 +16,17 @@ minikube------------------------------------------------------------------------
 installation:
 winget install Kubernetes.kubectl
 winget install Kubernetes.minikube
-add path to environment variables till minikube
+add path to environment variables till minikub48  
 
+creation of image:
+git clone ....
+docker build -t web-app-222 .
+docker run -d -p 7777:8080 hubimg-web-app-222
+docker tag web-app-222 neksha/hubimg-web-app-222:latest
+docker push neksha/hubimg-web-app-222:latest
 
 minikube version
-docker pull neksha/hubimg-web-app-222
+docker pull neksha/hubimg-web-app-222-- already pushed img in hub
 minikube start --driver=docker
 minikube status
 kubectl create deployment mywebapp --image=neksha/hubimg-web-app-222:latest
@@ -30,8 +36,6 @@ kubectl scale deployment mywebapp --replicas=4
 kubectl expose deployment mywebapp --type=NodePort --port=8080
 kubectl get svc
 kubectl port-forward svc/mywebapp 9999:8080
-
-
 
 
 
