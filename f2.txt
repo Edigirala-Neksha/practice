@@ -12,6 +12,48 @@ CMD ["catalina.sh", "run"]
 
 
 
+
+
+
+
+Scripted-pipeline:---------------------------------------------------------------------------------------------------------------------------------------------
+pipeline {
+    agent any
+    tools{
+        maven 'MAVEN_HOME'
+    }
+    stages {
+        stage('git repo & clean') {
+            steps {
+                //bat "rmdir  /s /q mavenjava"
+                bat "git clone https://github.com/Edigirala-Neksha/se-lab2-web-maven.git"
+                bat "mvn clean -f se-lab2-web-maven"
+            }
+        }
+        stage('install') {
+            steps {
+                bat "mvn install -f se-lab2-web-maven" 
+            }
+        }
+        stage('test') {
+            steps {
+                bat "mvn test -f se-lab2-web-maven"
+            }
+        }
+        stage('package') {
+            steps {
+                bat "mvn package -f se-lab2-web-maven"
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
 minikube-------------------------------------------------------------------------------------------------------------------------------------------------------
 installation:
 winget install Kubernetes.kubectl
