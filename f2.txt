@@ -51,6 +51,76 @@ pipeline {
 
 
 
+2 stage------------------------------------------
+pipeline {
+    agent any
+    tools {
+        maven 'MAVEN_HOME'
+    }
+    stages {
+        stage('Checkout & Build') {
+            steps {
+                bat 'git clone https://github.com/Edigirala-Neksha/se-lab2-java-maven.git'
+                bat 'mvn clean package -f se-lab2-java-maven'
+            }
+        }
+        stage('Test') {
+            steps {
+                bat 'mvn test -f se-lab2-java-maven'
+            }
+        }
+    }
+    post {
+        always {
+            echo "Pipeline completed."
+        }
+    }
+}
+
+
+
+
+
+
+3 stage----------------------------------------------------------------------------
+pipeline {
+    agent any
+    tools {
+        maven 'MAVEN_HOME'
+    }
+    stages {
+        stage('Checkout & Clean') {
+            steps {
+                bat 'git clone https://github.com/Edigirala-Neksha/se-lab2-web-maven.git'
+                bat 'mvn clean -f se-lab2-web-maven'
+            }
+        }
+        stage('Build & Test') {
+            steps {
+                bat 'mvn install -f se-lab2-web-maven'
+                bat 'mvn test -f se-lab2-web-maven'
+            }
+        }
+        stage('Package') {
+            steps {
+                bat 'mvn package -f se-lab2-web-maven'
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+    }
+}
+
+
+
+
+
+
+
+
 
 
 
