@@ -1,6 +1,45 @@
 hey welcome
 
 
+
+
+version: '3.9'
+
+services:
+
+  db:
+    image: mysql:5.7
+    container_name: wordpress-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    ports:
+      - "3306:3306"
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress-app
+    restart: always
+    ports:
+      - "9070:80"  # Map port 80 of the container to port 9080 of the host
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    depends_on:
+      - db
+
+
+
+
+
+
+
+
 ---------------------------------------------------------------------------------------------------------------
 version: "3.9"
 
