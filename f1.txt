@@ -1,6 +1,63 @@
 hey welcome
 
 
+---------------------------------------------------------------------------------------------------------------
+version: "3.9"
+
+services:
+
+  tomcat1:
+    image: neksha/se-lab2-web-maven:latest
+    container_name: tomcat-app
+    ports:
+      - "6020:8080"
+    restart: always
+
+  wordpress-db:
+    image: mysql:8.0
+    container_name: wordpress-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wpdb
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wppass
+    ports:
+      - "3307:3306"
+    volumes:
+      - wpdb_data:/var/lib/mysql
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress-site
+    restart: always
+    ports:
+      - "8085:80"
+    environment:
+      WORDPRESS_DB_HOST: wordpress-db:3306
+      WORDPRESS_DB_NAME: wpdb
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppass
+    depends_on:
+      - wordpress-db
+    volumes:
+      - wp_content:/var/www/html
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-server
+    ports:
+      - "8081:80"
+    restart: always
+    depends_on:
+      - tomcat1
+      - wordpress
+
+volumes:
+  wpdb_data:
+  wp_content:
+
+
 
 
 
