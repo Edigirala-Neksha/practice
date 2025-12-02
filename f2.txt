@@ -80,6 +80,57 @@ pipeline {
 
 
 
+2 stage java with email---------------------------------------------------
+pipeline {
+    agent any
+
+    tools {
+        maven 'MAVEN_HOME'
+    }
+
+    stages {
+        stage('Checkout & Build') {
+            steps {
+                // DELETE OLD FOLDER TO AVOID GIT ERROR 128
+                bat 'rmdir /s /q se-lab2-java-maven || exit 0'
+
+                // CLONE THE REPO
+                bat 'git clone https://github.com/Edigirala-Neksha/se-lab2-java-maven.git'
+
+                // BUILD USING MAVEN
+                bat 'mvn clean package -f se-lab2-java-maven'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'mvn test -f se-lab2-java-maven'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Pipeline completed."
+            emailext (
+                to: "edigiralaneksha@gmail.com",
+                subject: "Jenkins Pipeline Status: ${currentBuild.currentResult}",
+                body: """
+                    Hello Neksha,<br><br>
+                    Your Jenkins Pipeline has completed.<br><br>
+                    <b>Status:</b> ${currentBuild.currentResult}<br>
+                    <b>Project:</b> se-lab2-java-maven<br><br>
+                    -- Jenkins Automated Notification
+                """,
+                mimeType: 'text/html'
+            )
+        }
+    }
+}
+
+
+
+
 
 
 3 stage----------------------------------------------------------------------------
@@ -115,6 +166,69 @@ pipeline {
 }
 
 
+
+
+
+
+3 stage &email---------------------------------------------------
+pipeline {
+    agent any
+
+    tools {
+        maven 'MAVEN_HOME'
+    }
+
+    stages {
+
+        stage('Checkout & Clean') {
+            steps {
+                // DELETE OLD FOLDER TO AVOID CLONE ERROR 128
+                bat 'rmdir /s /q se-lab2-web-maven || exit 0'
+
+                // CLONE PROJECT
+                bat 'git clone https://github.com/Edigirala-Neksha/se-lab2-web-maven.git'
+
+                // CLEAN
+                bat 'mvn clean -f se-lab2-web-maven'
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                bat 'mvn install -f se-lab2-web-maven'
+                bat 'mvn test -f se-lab2-web-maven'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                bat 'mvn package -f se-lab2-web-maven'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+
+            // EMAIL NOTIFICATION
+            emailext(
+                to: "edigiralaneksha@gmail.com",
+                subject: "Jenkins Build Status: ${currentBuild.currentResult}",
+                body: """
+                    <h3>Hello Neksha,</h3>
+                    <p>Your Jenkins pipeline for <b>se-lab2-web-maven</b> has finished.</p>
+                    <p><b>Status:</b> ${currentBuild.currentResult}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Build URL:</b> <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                    <br>
+                    <p>Regards,<br>Jenkins CI Server</p>
+                """,
+                mimeType: "text/html"
+            )
+        }
+    }
+}
 
 
 
