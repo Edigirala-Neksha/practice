@@ -309,6 +309,8 @@ launch instance
 select instance and connect 
 take the shh and paste  it at path of .pem file 
 if shh error then----- chmod command paste then ssh command paste
+sudo apt-get update
+sudo apt-get install docker.io
 git clone ....
 docker build -t img1 .
 docker run -d --name cont1 -p 7777:8080 img1
