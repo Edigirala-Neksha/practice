@@ -251,3 +251,59 @@ git init
 git add .
 git commit 
 .....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+minkube deployment.yaml
+
+# Start Minikube
+minikube start
+
+# Apply deployment.yaml
+kubectl apply -f deployment.yaml
+
+# Check deployment status
+kubectl get deployments
+
+# Check pods
+kubectl get pods
+
+# Describe deployment
+kubectl describe deployment my-dep1
+
+# (Optional) Expose deployment as NodePort service
+kubectl expose deployment my-dep1 --type=NodePort --port=80 --target-port=8080
+
+# Check services
+kubectl get svc
+
+# Access the app in browser
+minikube service my-dep1
+
+# (Optional) Pod logs
+kubectl logs <pod-name>
