@@ -208,7 +208,9 @@ cmd> ssh-keygen -t rsa
 copy the path of public key saved
 open the file with notepad
 copy the ssh key from notepad 
-github> settings > ssh and gpg keys > add new key
+github> settings > ssh and gpg keys > add new key > save
+
+select ssh and copy the cmds
 
 
 
