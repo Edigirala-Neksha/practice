@@ -1,5 +1,12 @@
 Android app permissions------------------------------------------------------------------------------------------------------------------------------------
 
+Open Android Studio
+Command prompt:
+cd C:\Users\Admin\AppData\Local\Android\Sdk\emulator
+emulator -list-avds
+emulator -avd Pixel_2 -http-proxy http://10.0.2.2:8080
+
+
 Open Android Studio  ->  Open device manager  -> select any device
 Settings-> Network and Internet-> wifi  ->select icon  -> top right corner there is edit->advanced options -> proxy->Change proxy None->Manual->Hostname as 10.0.2.2 ->save
 
