@@ -1,4 +1,4 @@
-Android app permissions--------------------------------------------------------------------
+Android app permissions------------------------------------------------------------------------------------------------------------------------------------
 
 Open Android Studio  ->  Open device manager  -> select any device
 Settings-> Network and Internet-> wifi  ->select icon  -> top right corner there is edit->advanced options -> proxy->Change proxy None->Manual->Hostname as 10.0.2.2 ->save
@@ -35,7 +35,23 @@ In Burp Suite, check Proxy → HTTP History.
 
 
 
-IOT Security-------------------------------------------------------------------------------
+disk image analyzing-----------------------------------------------------------------------------------------------------------------------------------------------
+
+echo "cyber security">evidence.txt
+ls
+lsblk
+sudo apt install dc3dd
+dd if=/dev/zero of=practice_disk.dd bs=1M count=1000 | tee acquisition.log
+mkfs.ext4 practice_disk.dd
+ls -lh /home/kmit/practice_disk.dd
+sudo autopsy
+browswer-new case and all
+
+
+
+
+
+IOT Security-------------------------------------------------------------------------------------------------------------------------------------------------------
 
 docker run -d -p 8090:3000 --name juiceshop bkimminich/juice-shop
 cmd: ipconfig
@@ -46,7 +62,7 @@ inspect > network > fetch/xhr
 
 
 
-log file analysis for incident detection--------------------------------------------------
+log file analysis for incident detection---------------------------------------------------------------------------------------------------------------------------
 
 cd /var/log
 ls :verify PostgreSQL
@@ -85,7 +101,7 @@ journalctl --since "10 minutes ago"
 
 
 
-network forensics using wireshark----------------------------------------------------------
+network forensics using wireshark----------------------------------------------------------------------------------------------------------------------------------
 
 terminal : wireshark &
 select eth0
@@ -106,7 +122,7 @@ I/O graphs
 
 
 
-security audit-----------------------------------------------------------------------------
+security audit-----------------------------------------------------------------------------------------------------------------------------------------------------
 system info :win+r
              msinfo32
 
@@ -132,7 +148,7 @@ browser security: chrome > settings > privacy and security > safe browsing on
 
 
 
-privacy audit------------------------------------------------------------------------------
+privacy audit------------------------------------------------------------------------------------------------------------------------------------------------------
 
 sudo apt update
 sudo apt install nodejs npm –y
